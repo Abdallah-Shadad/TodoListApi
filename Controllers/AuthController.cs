@@ -22,7 +22,7 @@ namespace TodoListApi.Controllers
             try
             {
                 var result = await _authService.Register(dto);
-                return Ok(result);
+                return StatusCode(201, result);
             }
             catch (Exception ex)
             {
@@ -35,12 +35,16 @@ namespace TodoListApi.Controllers
         {
             try
             {
-                var result = _authService.Login(dto);
+                var result = await _authService.Login(dto);
                 return Ok(result);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(new { ex.Message });
             }
             catch (Exception ex)
             {
-                return BadRequest(new { message = ex.Message });
+                return BadRequest(new { ex.Message });
             }
         }
     }
