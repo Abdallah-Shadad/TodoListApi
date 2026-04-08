@@ -11,6 +11,7 @@ namespace TodoListApi
     {
         public static void Main(string[] args)
         {
+
             var builder = WebApplication.CreateBuilder(args);
 
             // --- 1. Services Configuration ---
@@ -65,6 +66,17 @@ namespace TodoListApi
                     }
                 });
             });
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAll",
+                    builder =>
+                    {
+                        builder.AllowAnyOrigin()
+                               .AllowAnyMethod()
+                               .AllowAnyHeader();
+                    });
+            });
+
 
             builder.Services.AddAuthorization();
             builder.Services.AddControllers();
@@ -84,6 +96,9 @@ namespace TodoListApi
             }
 
             app.UseHttpsRedirection();
+            app.UseRouting();
+            // Cors
+            app.UseCors("AllowAll");
 
             // Authentication must always come before Authorization
             app.UseAuthentication();
