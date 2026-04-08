@@ -9,13 +9,11 @@ namespace TodoListApi.Services
     public class TaskService : ITaskService
     {
         private readonly AppDbContext _context;
-        private readonly IConfiguration _configuration;
         private readonly IMapper _mapper;
 
-        public TaskService(AppDbContext context, IConfiguration configuration, IMapper mapper)
+        public TaskService(AppDbContext context, IMapper mapper)
         {
             _context = context;
-            _configuration = configuration;
             _mapper = mapper;
         }
         public async Task<TaskResponseDto> CreateTask(CreateTaskDto dto, int userId)
@@ -43,7 +41,8 @@ namespace TodoListApi.Services
             var task = await _context.Tasks
                 .FirstOrDefaultAsync(t => t.Id == id && t.UserId == userId);
 
-            throw new KeyNotFoundException("Task not found");
+            if (task == null)
+                throw new KeyNotFoundException("Task not found");
 
             return _mapper.Map<TaskResponseDto>(task);
         }
@@ -53,7 +52,8 @@ namespace TodoListApi.Services
             var existingTask = await _context.Tasks
                 .FirstOrDefaultAsync(t => t.Id == id && t.UserId == userId);
 
-            if (existingTask == null) return null;
+            if (existingTask == null)
+                throw new KeyNotFoundException("Task not found");
 
             _mapper.Map(dto, existingTask);
 

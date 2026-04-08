@@ -7,7 +7,7 @@ namespace TodoListApi.Controllers
 {
     [Authorize]
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/tasks")]
     public class TasksController : BaseController
     {
         private readonly ITaskService _taskService;
