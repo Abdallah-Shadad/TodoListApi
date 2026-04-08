@@ -40,6 +40,7 @@ namespace TodoListApi
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+            builder.Services.AddAutoMapper(typeof(MappingProfile));
 
             // --- 2. Build the App ---
 
